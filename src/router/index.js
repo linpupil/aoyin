@@ -44,14 +44,23 @@ export default new Router({
       redirect: 'market', /* 子路由默认加载第一个界面 */
       component: Main,
       children: [ /* 子路由 */
+        // {
+        //   path: '/market',
+        //   name: 'market',
+        //   meta: {
+        //     title: '首页',
+        //     icon: 'iconfont iconfont iconzichan'
+        //   },
+        //   component: () => import('@/views/main/market')
+        // },
         {
-          path: '/market',
-          name: 'market',
+          path: '/home',
+          name: 'home',
           meta: {
             title: '首页',
             icon: 'iconfont iconfont iconzichan'
           },
-          component: () => import('@/views/main/market')
+          component: () => import('@/views/main/home')
         },
         /* {
           path: '/otc',
