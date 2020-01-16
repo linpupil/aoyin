@@ -1,15 +1,15 @@
 <template>
   <div class="home-wrapper">
     <div class="home-top-block">欢迎来到KV 澳银孵化器</div>
-    <div class="home-top-price">{{currentPrice}}</div>
+    <div class="home-top-price">当前 {{currentPrice}} kv / usdt 币价</div>
     <van-row class="home-version-wrapper">
-      <van-col :span="12" class="version-block">
+      <van-col :span="12" class="version-block" @click="toVersion('experience')">
         <span class="version-title-wrapper">
           <p class="version-title font16">投资体验版</p>
           <p class="version-subtitle">50~300 起投</p>
         </span>
       </van-col>
-      <van-col :span="12" class="version-block">
+      <van-col :span="12" class="version-block" @click="toVersion('flag')">
         <span class="version-title-wrapper">
           <p class="version-title font16">投资旗舰版</p>
           <p class="version-subtitle">310~2000 起投</p>
@@ -19,14 +19,14 @@
     <div class="home-property-wrapper">
       <div class="property-title font16">我的资产</div>
       <div class="property-list-block" v-for="(item, index) in propertyList" :key="index">
-        <span class="property-list-icon">{{item.name}}币</span>
+        <span class="property-list-icon">{{item.currency}}币</span>
         <span class="property-balance">
-          <p>可用：xxx</p>
-          <p>冻结：xxx</p>
+          <p>可用：{{item.available_balance}}</p>
+          <p>冻结：{{item.frozen_balance}}</p>
         </span>
         <span class="property-button-wrapper">
-          <van-button class="home-button topup">充值</van-button>
-          <van-button class="home-button">提现</van-button>
+          <van-button class="home-button topup" @click="toTopUp(item)">充值</van-button>
+          <van-button class="home-button" @click="toWithdraw(item)">提现</van-button>
         </span>
       </div>
     </div>
@@ -36,7 +36,7 @@
 <script>
 
 import { Row, Col, Button } from 'vant';
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'home',
@@ -47,24 +47,70 @@ export default {
   },
   data() {
     return {
-      currentPrice: '当前 kv / usdt 币价',
+      currentPrice: 0,
       propertyList: [
-        { name: 'KV' },
-        { name: 'CEO' },
-      ]
+        {
+          currency: 'KV',
+          available_balance: '0',
+          frozen_balance: '0',
+        },
+      ],
+      // 计时器
+      timer: null
     };
   },
-  created() {},
+  computed: {
+    ...mapGetters('sign', [
+      'isLogined'
+    ]),
+  },
   mounted() {
+    this.market()
+    // 1s更新一次行情
+    if (this.timer) clearInterval(this.timer)
+    this.timer = setInterval(() => {
+      this.market()
+    }, 1000)
+
+    if (this.isLogined) {
+      this.getAssets()
+    }
   },
   methods: {
-    
+    toTopUp () {
+      this.$router.togo('/user/topUp')
+    },
+    toWithdraw () {
+      this.$router.togo('/user/withdraw')
+    },
+    // 获取资产
+    async getAssets() {
+      const res = await this.$api.user.getAssets('all')
+      this.propertyList = res.data.result
+    },
+    // 获取行情
+    async market() {
+      const res = await this.$api.user.market('KV_USDT')
+      // console.log(res)
+      this.currentPrice = res.data.result.KVUSDT
+    },
+    // 去版本页
+    toVersion (type) {
+      this.$router.togo({
+        path: `user/incubator/${type}`
+      })
+    }
   },
-  destroyed() {}
+  destroyed() {
+    clearInterval(this.timer)
+  }
 };
 </script>
 
 <style lang="less" scoped>
+.home-wrapper {
+  padding-bottom: 50px;
+}
 .font16 {
   font-size: 16px;
 }

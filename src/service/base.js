@@ -8,9 +8,12 @@ export const ERR_OK = 1;
 export const VerifySendTimeout = 60;
 
 // 域名
-export const DomainUrl = 'http://www.icmg.me';
+// export const DomainUrl = 'http://www.icmg.me';
+export const DomainUrl = 'http://www.kiwicoin.vip';
+
 // 图片域名
-export const ImageUrl = 'http://img.icmg.me';
+// export const ImageUrl = 'http://img.icmg.me';
+export const ImageUrl = 'http://image.zhdt.online';
 // 微信授权
 export let WxAuthConfig = {
   authUrl: 'https://open.weixin.qq.com/connect/oauth2/authorize',
@@ -27,19 +30,22 @@ if (process.env.NODE_ENV === 'development') {
   base = {
     yunc2c: 'http://localhost:8081/yunc2c',
     domainUrl: 'http://localhost:8081',
-    imageUrl: 'http://img.icmg.me'
+    // imageUrl: 'http://img.icmg.me'
+    imageUrl: 'http://image.zhdt.online'
   };
 } else if (process.env.NODE_ENV === 'debug') {
   base = {
     yunc2c: 'http://localhost:8081/yunc2c',
     domainUrl: 'http://localhost:8081',
-    imageUrl: 'http://img.icmg.me'
+    // imageUrl: 'http://img.icmg.me'
+    imageUrl: 'http://image.zhdt.online'
   };
 } else if (process.env.NODE_ENV === 'production') {
   base = {
     yunc2c: 'http://h5.huanghe02.cn/yunc2c',
     domainUrl: 'http://h5.huanghe02.cn',
-    imageUrl: 'http://img.icmg.me'
+    // imageUrl: 'http://img.icmg.me'
+    imageUrl: 'http://image.zhdt.online'
   };
 }
 

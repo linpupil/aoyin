@@ -101,7 +101,8 @@ module.exports = {
     hotOnly: false,
     proxy: { // 设置代理
       '/yunc2c': {
-        target: 'http://www.icmg.me',
+        // target: 'http://www.icmg.me',
+        target: 'http://www.kiwicoin.vip',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

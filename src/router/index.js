@@ -7,6 +7,7 @@ import signModules from './modules/sign';
 import myModules from './modules/my';
 import otherModules from './modules/other';
 import orderModules from './modules/order';
+import userModules from './modules/user';
 
 Vue.use(Router);
 
@@ -95,7 +96,8 @@ export default new Router({
     ...otcModules,
     ...myModules,
     ...otherModules,
-    ...orderModules
+    ...orderModules,
+    ...userModules
   ]
 });
 
