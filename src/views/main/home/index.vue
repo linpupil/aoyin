@@ -19,7 +19,11 @@
     <div class="home-property-wrapper">
       <div class="property-title font16">我的资产</div>
       <div class="property-list-block" v-for="(item, index) in propertyList" :key="index">
-        <span class="property-list-icon">{{item.currency}}币</span>
+        <span class="property-list-icon">
+          <img class="icon-img" v-if="item.currency === 'KV'" src="~@/assets/image/img/coin_icon1.png">
+          <img class="icon-img" v-else src="~@/assets/image/img/coin_icon2.png">
+          <!-- <span>{{item.currency}}币</span> -->
+        </span>
         <span class="property-balance">
           <p>可用：{{item.available_balance}}</p>
           <p>冻结：{{item.frozen_balance}}</p>
@@ -175,6 +179,7 @@ export default {
   }
 
   .property-list-icon {
+    position: relative;
     display: inline-block;
     border-radius: 50%;
     height: 70px;
@@ -182,6 +187,20 @@ export default {
     border: solid 1px #073547;
     line-height: 70px;
     text-align: center;
+
+    // span {
+    //   position: relative;
+    //   z-index: 1;
+    // }
+
+    .icon-img {
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 0;
+      z-index: 0;
+      border-radius: 50%;
+    }
   }
   .home-button {
     display: inline-block;
