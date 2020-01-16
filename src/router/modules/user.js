@@ -4,7 +4,7 @@ export default [
     name: 'withdraw',
     meta: {
       title: '提现',
-      // requireAuth: true
+      requireAuth: true
     },
     component: () => import('@/views/user/withdraw')
   },
@@ -13,7 +13,7 @@ export default [
     name: 'topUp',
     meta: {
       title: '充值',
-      // requireAuth: true
+      requireAuth: true
     },
     component: () => import('@/views/user/top_up')
   },
@@ -22,7 +22,7 @@ export default [
     name: 'incubator',
     meta: {
       title: '孵化器',
-      // requireAuth: true
+      requireAuth: true
     },
     component: () => import('@/views/user/incubator')
   },
