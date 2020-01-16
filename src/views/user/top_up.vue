@@ -25,7 +25,7 @@
       <div class="code-button" @click="copyText" data-clipboard-target="#foo" data-clipboard-action="copy">复制充值地址</div>
     </div>
     <div class="discription">
-      <p>该地址仅用于 <span class="color-red">ERC20</span> <span class="color-usdt">USDT</span> 收款，</p>
+      <p>该地址仅用于 <span class="color-red">ERC20</span> <span class="color-usdt">代币</span> 收款，</p>
       <p>请勿向该地址转入其它币种！</p>
     </div>
   </div>
