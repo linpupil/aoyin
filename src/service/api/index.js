@@ -8,6 +8,7 @@ import otc from '@/service/api/otc';
 import sign from '@/service/api/sign';
 import my from '@/service/api/my';
 import order from '@/service/api/order';
+import user from '@/service/api/user';
 // 其他模块的接口……
 
 // 导出接口
@@ -17,6 +18,7 @@ export default {
   otc,
   sign,
   my,
-  order
+  order,
+  user
   // ……
 };
