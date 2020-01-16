@@ -42,8 +42,8 @@ if (process.env.NODE_ENV === 'development') {
   };
 } else if (process.env.NODE_ENV === 'production') {
   base = {
-    yunc2c: 'http://h5.huanghe02.cn/yunc2c',
-    domainUrl: 'http://h5.huanghe02.cn',
+    yunc2c: 'http://www.kiwicoin.vip/yunc2c',
+    domainUrl: 'http://www.kiwicoin.vip',
     // imageUrl: 'http://img.icmg.me'
     imageUrl: 'http://image.zhdt.online'
   };

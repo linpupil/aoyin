@@ -118,7 +118,7 @@ export default {
       }
     },
     toWxLogin() {
-      let redirectUrl = encodeURIComponent("http://h5.huanghe02.cn/#/wxLogin");
+      let redirectUrl = encodeURIComponent("http://www.kiwicoin.vip/#/wxLogin");
       let timestamp = $util.dateTime.getTime();
       let wxAuthUrl = WxAuthConfig.wxAuthCodeUrl.replace('APPID',this.appid).replace('REDIRECTURL',redirectUrl).replace('TIMESTAMP',timestamp);
       window.location = wxAuthUrl;

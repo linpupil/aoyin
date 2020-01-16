@@ -42,7 +42,7 @@ export default new Router({
     {
       path: '/',
       name: 'main',
-      redirect: 'market', /* 子路由默认加载第一个界面 */
+      redirect: 'home', /* 子路由默认加载第一个界面 */
       component: Main,
       children: [ /* 子路由 */
         // {
