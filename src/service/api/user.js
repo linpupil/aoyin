@@ -22,6 +22,14 @@ const otc = {
   market(params) {
     return axios.get(`${base.yunc2c}/wealth/huobi/price/${params}`);
   },
+  /**
+   * 获取充值地址
+   * @param {Object} params
+   * symbol 币种，coin_label_id 填 2
+   */
+  getTopUpAddress(params) {
+    return axios.get(`${base.yunc2c}/wealth/deposit/addrs/${params.symbol}/${params.coin_label_id}`);
+  },
   // 其他接口…………
 };
 

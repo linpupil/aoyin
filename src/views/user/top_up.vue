@@ -62,6 +62,7 @@ export default {
   computed: {
   },
   mounted() {
+    this.getTopUpAddress()
   },
   methods: {
     onClickLeft () {
@@ -89,7 +90,10 @@ export default {
       Toast('已复制到剪贴板，粘贴可用！')
 
     },
-    saveToAlbum () {}
+    saveToAlbum () {},
+    getTopUpAddress () {
+      
+    }
   }
 };
 </script>
