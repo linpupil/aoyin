@@ -1,17 +1,19 @@
 <template>
   <div class="home-wrapper">
-    <div class="home-top-block">欢迎来到KV 澳银孵化器</div>
-    <div class="home-top-price">当前 {{currentPrice}} kv / usdt 币价</div>
+    <div class="home-top-block">
+      <img src="~@/assets/image/img/home_banner.png">
+    </div>
+    <div class="home-top-price">{{currentPrice}} kiwi/usdt</div>
     <van-row class="home-version-wrapper">
       <van-col :span="12" class="version-block" @click="toVersion('experience')">
         <span class="version-title-wrapper">
-          <p class="version-title font16">投资体验版</p>
+          <p class="version-title font16">孵化体验版</p>
           <p class="version-subtitle">50~300 起投</p>
         </span>
       </van-col>
       <van-col :span="12" class="version-block" @click="toVersion('flag')">
         <span class="version-title-wrapper">
-          <p class="version-title font16">投资旗舰版</p>
+          <p class="version-title font16">孵化旗舰版</p>
           <p class="version-subtitle">310~2000 起投</p>
         </span>
       </van-col>
@@ -21,12 +23,13 @@
       <div class="property-list-block" v-for="(item, index) in propertyList" :key="index">
         <span class="property-list-icon">
           <img class="icon-img" v-if="item.currency === 'KV'" src="~@/assets/image/img/coin_icon1.png">
-          <img class="icon-img" v-else src="~@/assets/image/img/coin_icon2.png">
+          <img class="icon-img" v-if="item.currency === 'CEO'" src="~@/assets/image/img/coin_icon2.png">
           <!-- <span>{{item.currency}}币</span> -->
         </span>
         <span class="property-balance">
-          <p>可用：{{item.available_balance}}</p>
-          <p>冻结：{{item.frozen_balance}}</p>
+          <!-- KV字段处理，如果后台返回的是kiwi则可以不判断 -->
+          <p>{{item.currency === 'KV' ? 'KIWI' : item.currency}}可用：{{item.available_balance}}</p>
+          <p>{{item.currency === 'KV' ? 'KIWI' : item.currency}}冻结：{{item.frozen_balance}}</p>
         </span>
         <span class="property-button-wrapper">
           <van-button class="home-button topup" @click="toTopUp(item)">充值</van-button>
@@ -119,10 +122,15 @@ export default {
   font-size: 16px;
 }
 .home-top-block {
-  height: 150px;
-  line-height: 150px;
+  min-height: 100px;
+  // line-height: 150px;
   text-align: center;
   color: #fff;
+
+  img {
+    display: block;
+    width: 100%;
+  }
 }
 .home-top-price {
   border-top: 1px solid #073547;
