@@ -15,15 +15,14 @@
       </div>
       <div class="list-item">
         <van-cell @click="toInvite" icon="ali iconfont iconyaoqinghaoyou" title="邀请好友" is-link />
-        <!--<van-cell icon="ali iconfont iconyishoukuan" title="收款方式" is-link />-->
-        <!--<van-cell icon="ali iconfont iconguanggao" title="我的广告" is-link />-->
-        <van-cell @click="toMyOrder" icon="ali iconfont iconorder" title="我的订单" is-link />
-        <!--<van-cell icon="ali iconfont iconlaoban" title="广告商" is-link :value="bossAuthText[0]"/>-->
-        <van-cell @click="toService" :data-clipboard-text="appConfig.customerInfo" class="copy" icon="ali iconfont iconxiaoxi" title="联系客服" is-link />
-        <van-cell @click="toOnlineFK" icon="ali iconfont iconkefu" title="在线客服" is-link />
+        <van-cell @click="toInvestRecord" icon="ali iconfont iconguanggao" title="投资记录" is-link />
+        <van-cell @click="toInvestRecord" icon="ali iconfont iconguanggao" title="孵化器收益记录" is-link />
+        <van-cell @click="toInvestRecord" icon="ali iconfont iconguanggao" title="推荐收益记录" is-link />
+        <!--<van-cell @click="toService" :data-clipboard-text="appConfig.customerInfo" class="copy" icon="ali iconfont iconxiaoxi" title="联系客服" is-link />-->
+        <!--<van-cell @click="toOnlineFK" icon="ali iconfont iconkefu" title="在线客服" is-link />-->
         <van-cell @click="toSecurity" icon="ali iconfont iconanquan" title="安全设置" is-link />
-        <van-cell @click="toHelp" icon="ali iconfont iconicon-test" title="帮助中心" is-link />
-        <van-cell @click="toDownload" icon="ali iconfont iconxiazai" title="下载App" is-link />
+        <!--<van-cell @click="toHelp" icon="ali iconfont iconicon-test" title="帮助中心" is-link />-->
+        <!--<van-cell @click="toDownload" icon="ali iconfont iconxiazai" title="下载App" is-link />-->
       </div>
     </div>
     <div class="bottom-wrapper tabbar-bottom">
@@ -192,8 +191,8 @@ export default {
     toInvite() {
       this.$router.togo('/my/invite');
     },
-    toMyOrder() {
-      this.$router.togo('/order/list');
+    toInvestRecord() {
+      this.$router.togo('/my/record');
     },
     toService() {
       let self = this;
@@ -236,7 +235,7 @@ export default {
       this.$router.togo({
         name: 'other/iframe',
         query: {
-          title: 'Mpay下载',
+          title: '澳银下载',
           toUrl: BASE.DomainUrl
         }
       });

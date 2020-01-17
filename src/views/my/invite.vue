@@ -10,10 +10,16 @@
     />
     <div class="conten nav-top">
       <van-cell @click="toShare" class="li-item" title="分享邀请链接" is-link />
-      <van-cell-group title="专属邀请码">
+      <van-cell-group title="专属邀请码" class="margin-b-15">
         <van-cell @click="copy" class="copy" :data-clipboard-text="secode" :title="secode" value="复制邀请码" />
       </van-cell-group>
-      <van-cell-group title="我的推荐">
+      <van-cell-group class="margin-b-15">
+        <van-cell title="我的粉丝" value="16852人" />
+      </van-cell-group>
+      <van-cell-group class="margin-b-15">
+        <van-cell title="节点收益" value="16852.66" />
+      </van-cell-group>
+      <!--<van-cell-group title="我的推荐">
         <van-row class="row-header" gutter="20">
           <van-col class="text-left" span="8">直推</van-col>
           <van-col span="8">二级</van-col>
@@ -40,7 +46,7 @@
           <div class="empty-img"><img src="~@/assets/image/loading/empty-logo@2x.png"></div>
            <p class="empty-text">{{emptyText}}</p>
         </div>
-      </van-cell-group>
+      </van-cell-group>-->
     </div>
     <!--绑定邀请码弹窗-->
     <van-dialog
@@ -208,12 +214,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.margin-b-15{
+  margin-bottom: 15px;
+}
 </style>
 
 <style lang="less">
 .invite-wrapper{
   .van-cell{
-    padding: 20px 16px;
+    padding: 15px 16px;
     font-size: 15px;
   }
   /*分组cell*/
