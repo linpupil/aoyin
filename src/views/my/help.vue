@@ -26,7 +26,7 @@
           <van-col>快捷买币</van-col>
         </van-row>
         <van-row @click="toHelpContent('7')" class="custom-line">
-          <van-col>通过其它钱包充值数字货币进入Mpay</van-col>
+          <van-col>通过其它钱包充值数字货币进入澳银</van-col>
         </van-row>
         <van-row @click="toHelpContent('8')" class="custom-line">
           <van-col>推荐好友挖矿获得数字货币</van-col>

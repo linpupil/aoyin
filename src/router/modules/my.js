@@ -33,5 +33,14 @@ export default [
       requireAuth: true
     },
     component: () => import('@/views/my/invite_share')
+  },
+  {
+    path: '/my/record',
+    name: 'record',
+    meta: {
+      title: '投资记录',
+      requireAuth: false
+    },
+    component: () => import('@/views/my/record')
   }
 ];
