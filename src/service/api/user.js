@@ -54,6 +54,13 @@ const otc = {
   toInvest(params) {
     return axios.post(`${base.yunc2c}/invest/transtoration`, params);
   },
+
+  releaseButton1 () {
+    return axios.get(`${base.yunc2c}/invest/cronAm3Scheduled`);
+  },
+  releaseButton2 () {
+    return axios.get(`${base.yunc2c}/invest/cronAm5Scheduled`);
+  }
   
 };
 

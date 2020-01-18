@@ -33,7 +33,7 @@
         </span>
         <span class="property-button-wrapper">
           <van-button class="home-button topup" @click="toTopUp(item)">充值</van-button>
-          <van-button class="home-button" @click="toWithdraw(item)">提现</van-button>
+          <van-button class="home-button" @click="toWithdraw(item)">提币</van-button>
         </span>
       </div>
     </div>

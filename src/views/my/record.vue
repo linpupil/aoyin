@@ -14,19 +14,19 @@
     </van-row>
     <van-row v-if="$route.params.title === 'invest'" class="nav-top table-title">
       <van-col span="6">投资天数</van-col>
-      <van-col span="6">使用kv</van-col>
+      <van-col span="6">使用kiwi</van-col>
       <van-col span="6">使用ceo</van-col>
       <van-col span="6">时间</van-col>
     </van-row>
     <van-row v-if="$route.params.title === 'incubator'" class="nav-top table-title">
-      <van-col span="6">释放基准</van-col>
-      <van-col span="6">释放比例</van-col>
-      <van-col span="6">收益kv</van-col>
-      <van-col span="6">时间</van-col>
+      <!-- <van-col span="6">释放基准</van-col> -->
+      <van-col span="8">释放比例</van-col>
+      <van-col span="8">收益kiwi</van-col>
+      <van-col span="8">时间</van-col>
     </van-row>
     <van-row v-if="$route.params.title === 'introduce'" class="nav-top table-title">
       <van-col span="8">粉丝</van-col>
-      <van-col span="8">收益kv</van-col>
+      <van-col span="8">收益kiwi</van-col>
       <van-col span="8">时间</van-col>
     </van-row>
     <pagination :data="tableData" @getList="getRecordList" @returnList="returnList">
@@ -46,6 +46,21 @@
           <van-col span="6">{{item.created_time}}</van-col>
         </van-row>
       </div>
+      <div v-if="$route.params.title === 'incubator'">
+        <van-row class="table-row" v-for="(item, index) in list" :key="index">
+          <!-- <van-col span="6">{{item.amount}}kiwi</van-col> -->
+          <van-col span="8">{{new Decimal(item.rate).mul(100)}}%</van-col>
+          <van-col span="8">{{item.unfrozen_num}}</van-col>
+          <van-col span="8">{{item.created_time}}</van-col>
+        </van-row>
+      </div>
+      <div v-if="$route.params.title === 'introduce'">
+        <van-row class="table-row" v-for="(item, index) in list" :key="index">
+          <van-col span="8">{{item.name}}</van-col>
+          <van-col span="8">{{item.separate}}</van-col>
+          <van-col span="8">{{item.createdTime}}</van-col>
+        </van-row>
+      </div>
     </pagination>
   </div>
 </template>
@@ -54,6 +69,7 @@
 import { NavBar, Row, Col } from 'vant';
 import Pagination from '@/components/Pagination/Pagination'
 import keyValue from '@/config/keyValue.js'
+const Decimal = require('decimal.js')
 
 
 const config = {
@@ -81,7 +97,8 @@ export default {
       tableData: {},
       // 列表数据
       list: [],
-      keyValue: keyValue
+      keyValue: keyValue,
+      Decimal: Decimal
     };
   },
   created() {},
@@ -105,14 +122,14 @@ export default {
         res = await this.$api.my.getRecord({symbol: this.$route.params.symbol, type: this.$route.params.type, page: param.pageNum || 0, pageSize: param.pageSize || 10})
         this.tableData = res.data.result
         this.list = res.data.result.list
-      } else {
-        this.tableData = {
-          pageSize: 10,
-          total: 0,
-          pageNum: 1,
-          pages: 1
-        }
-        this.list = []
+      } else if (this.$route.params.title === 'incubator') {
+        res = await this.$api.my.getReleaseRecord({type: 1, page: param.pageNum || 0, pageSize: param.pageSize || 10})
+        this.tableData = res.data.result.unFrozenList
+        this.list = res.data.result.unFrozenList.list
+      }  else if (this.$route.params.title === 'introduce') {
+        res = await this.$api.my.getBenefitRecord({type: 3, page: param.pageNum || 0, pageSize: param.pageSize || 10})
+        this.tableData = res.data.result.separateVOList
+        this.list = res.data.result.separateVOList.list
       }
       
     },

@@ -8,7 +8,11 @@
       @click-left="onClickLeft"
       @click-right="onClickRight"
     />
-    <div class="withdraw-warning-wrapper">温馨提示</div>
+    <div class="withdraw-warning-wrapper">
+      <p>温馨提示</p>
+      <p>最小转出额度{{min_withdraw}}{{$route.params.id}}</p>
+      <p>手续费{{new Decimal(withdraw_fee).mul(100)}}%,至少{{new Decimal(min_withdraw).mul(withdraw_fee)}}</p>
+    </div>
     <div class="withdraw-input-wrapper">
       <van-field v-model="submitObj.addr" placeholder="输入或长按粘贴地址" />
       <div class="input-limit-wrapper">
@@ -20,7 +24,7 @@
     <div class="withdraw-input-wrapper">
       <van-field v-model="submitObj.security_pwd" type="password" placeholder="请输入资金密码" />
     </div>
-    <p class="withdraw-mark">提现手续费{{withdraw_fee}} {{$route.params.id}}   实际到账 {{realAmount}}</p>
+    <p class="withdraw-mark">提现手续费{{new Decimal(withdraw_fee).mul(100)}}% {{$route.params.id}}   实际到账 {{realAmount}}</p>
     
     <div class="btn-wrapper">
       <div @click="withdraw" class="custom-block-btn">
@@ -61,7 +65,8 @@ export default {
       // 最小可提
       min_withdraw: 0,
       withdraw_fee: 0,
-      available_balance: 0
+      available_balance: 0,
+      Decimal: Decimal
     };
   },
   created() {
@@ -72,7 +77,7 @@ export default {
     realAmount () {
       let val = 0
       if (this.submitObj.amount) {
-        val = new Decimal(this.submitObj.amount).minus(this.withdraw_fee)
+        val = new Decimal(this.submitObj.amount).minus(new Decimal(this.submitObj.amount).mul(this.withdraw_fee))
       }
       return val
     }
@@ -105,7 +110,15 @@ export default {
       }
       await this.$api.user.toWithdraw(this.submitObj)
       Toast('提币成功')
+      this.submitObj.amount = ''
+      this.submitObj.security_pwd = ''
+      this.submitObj.addr = ''
       this.getAssets()
+    },
+    async getConfig () {
+      // experience 体验版 flag旗舰版
+      const res = await this.$api.common.configInfo()
+      
     },
     // 获取资产
     async getAssets() {
@@ -127,8 +140,11 @@ export default {
 }
 .withdraw-warning-wrapper {
   padding: 15px;
-  line-height: 100px;
   background-color: #12202d;
+
+  p {
+    line-height: 30px;
+  }
 }
 .withdraw-input-wrapper {
   margin-top: 10px;

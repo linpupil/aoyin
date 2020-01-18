@@ -8,6 +8,19 @@
       @click-right="onClickRight"
     />
     
+      <div @click="btnClick(1)" class="custom-block-btn">
+        静态释放和节点等级计算
+        <i class="custom-block-btn-bg">
+          <img src="~@/assets/image/img/block-btn-bg@2x.png">
+          </i>
+      </div>
+      <div @click="btnClick(2)" style="margin-top: 10px;" class="custom-block-btn">
+        级差奖释放
+        <i class="custom-block-btn-bg">
+          <img src="~@/assets/image/img/block-btn-bg@2x.png">
+          </i>
+      </div>
+    
     <div class="incubator-block" v-for="(item, index) in incubatorList" :key="index">
       <p class="block-title">{{item.name}}</p>
       <van-row class="block-row">
@@ -136,6 +149,22 @@ export default {
     this.init()
   },
   methods: {
+    btnClick (param) {
+      if (param === 1) {
+        this.$api.user.releaseButton1().then(() => {
+          Toast('释放成功')
+        }).catch(err => {
+          Toast(err.data.msg)
+        })
+      } else {
+        this.$api.user.releaseButton2().then(() => {
+          Toast('释放成功')
+        }).catch(err => {
+          Toast(err.data.msg)
+          // Toast(err)
+        })
+      }
+    },
     onClickLeft () {
       this.$router.goBack();
     },

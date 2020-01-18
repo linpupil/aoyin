@@ -51,6 +51,20 @@ const my = {
   getInvestRecord(params) {
     return axios.get(`${base.yunc2c}/invest/rationrecord/${params.page}/${params.pageSize}`);
   },
+  /**
+   * 查询释放记录
+   * @param {Object} params
+   */
+  getReleaseRecord(params) {
+    return axios.get(`${base.yunc2c}/invest/unfrozenrecord/${params.type}/${params.page}/${params.pageSize}`);
+  },
+  /**
+   * 查询收益记录
+   * @param {Object} params
+   */
+  getBenefitRecord(params) {
+    return axios.get(`${base.yunc2c}/wealth/separaterecord/${params.type}/${params.page}/${params.pageSize}`);
+  },
   // 其他接口…………
 };
 
