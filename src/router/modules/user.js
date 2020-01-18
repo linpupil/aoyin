@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/user/withdraw',
+    path: '/user/withdraw/:id',
     name: 'withdraw',
     meta: {
       title: '提现',
@@ -9,7 +9,7 @@ export default [
     component: () => import('@/views/user/withdraw')
   },
   {
-    path: '/user/topUp',
+    path: '/user/topUp/:id',
     name: 'topUp',
     meta: {
       title: '充值',

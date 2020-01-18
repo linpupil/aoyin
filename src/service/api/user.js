@@ -30,7 +30,31 @@ const otc = {
   getTopUpAddress(params) {
     return axios.get(`${base.yunc2c}/wealth/deposit/addrs/${params.symbol}/${params.coin_label_id}`);
   },
-  // 其他接口…………
+  /**
+   * 提现申请
+   * @param {Object} params
+   */
+  toWithdraw(params) {
+    return axios.post(`${base.yunc2c}/wealth/pushwithdraw`, params);
+  },
+
+  // 孵化器
+  /**
+   * 查询正在进行中的投资 
+   * @param {Number} type
+   * type 1体验版  2旗舰版
+   */
+  getInvest(type) {
+    return axios.get(`${base.yunc2c}/invest/investinfo/${type}`);
+  },
+  /**
+   * 进行投资 
+   * @param {Object} params
+   */
+  toInvest(params) {
+    return axios.post(`${base.yunc2c}/invest/transtoration`, params);
+  },
+  
 };
 
 // export const apiAddress = p => post('api/v1/users/my_address/address_edit_before', p);

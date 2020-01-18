@@ -21,7 +21,7 @@
             style="line-height:inherit;"
           />
         </van-cell>
-        <van-cell title="付款方式" value="Mpay支付" />
+        <van-cell title="付款方式" value="kiwi孵化器支付" />
         <van-cell title="币种" :value="currency" />
       </van-cell-group>
       <van-cell-group title="资金密码">
@@ -59,7 +59,7 @@ export default {
     return {
       headerObj: {
         fixed: true,
-        title: 'Mpay支付'
+        title: 'kiwi孵化器'
       },
       // 地址
       schemeParams: '',
@@ -189,7 +189,7 @@ export default {
       }).then(res => {
         if (this.schemeVal !== 'null') {  
           Dialog.confirm({
-            message: '操作成功,是否离开Mpay'
+            message: '操作成功,是否离开kiwi孵化器'
           }).then(() => {
             window.location = this.schemeVal;
           }).catch(() => {

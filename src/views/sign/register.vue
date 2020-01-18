@@ -9,7 +9,7 @@
         <i class="logo">
           <img src="~@/assets/image/icon/logo.png">
         </i>
-        欢迎使用MPay
+        欢迎使用kiwi孵化器
       </h1>
     </div>
     <div class="input-box">

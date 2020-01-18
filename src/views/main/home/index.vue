@@ -18,18 +18,18 @@
         </span>
       </van-col>
     </van-row>
-    <div class="home-property-wrapper">
+    <div class="home-property-wrapper" v-if="isLogined">
       <div class="property-title font16">我的资产</div>
       <div class="property-list-block" v-for="(item, index) in propertyList" :key="index">
         <span class="property-list-icon">
-          <img class="icon-img" v-if="item.currency === 'KV'" src="~@/assets/image/img/coin_icon1.png">
+          <img class="icon-img" v-if="item.currency === 'KIWI'" src="~@/assets/image/img/coin_icon1.png">
           <img class="icon-img" v-if="item.currency === 'CEO'" src="~@/assets/image/img/coin_icon2.png">
           <!-- <span>{{item.currency}}币</span> -->
         </span>
         <span class="property-balance">
           <!-- KV字段处理，如果后台返回的是kiwi则可以不判断 -->
-          <p>{{item.currency === 'KV' ? 'KIWI' : item.currency}}可用：{{item.available_balance}}</p>
-          <p>{{item.currency === 'KV' ? 'KIWI' : item.currency}}冻结：{{item.frozen_balance}}</p>
+          <p>{{item.currency}}可用：{{item.available_balance}}</p>
+          <p>{{item.currency}}冻结：{{item.frozen_balance}}</p>
         </span>
         <span class="property-button-wrapper">
           <van-button class="home-button topup" @click="toTopUp(item)">充值</van-button>
@@ -56,11 +56,11 @@ export default {
     return {
       currentPrice: 0,
       propertyList: [
-        {
-          currency: 'KV',
-          available_balance: '0',
-          frozen_balance: '0',
-        },
+        // {
+        //   currency: 'KV',
+        //   available_balance: '0',
+        //   frozen_balance: '0',
+        // },
       ],
       // 计时器
       timer: null
@@ -84,11 +84,11 @@ export default {
     }
   },
   methods: {
-    toTopUp () {
-      this.$router.togo('/user/topUp')
+    toTopUp (item) {
+      this.$router.togo(`/user/topUp/${item.currency}`)
     },
-    toWithdraw () {
-      this.$router.togo('/user/withdraw')
+    toWithdraw (item) {
+      this.$router.togo(`/user/withdraw/${item.currency}`)
     },
     // 获取资产
     async getAssets() {
@@ -97,9 +97,9 @@ export default {
     },
     // 获取行情
     async market() {
-      const res = await this.$api.user.market('KV_USDT')
+      const res = await this.$api.user.market('KIWI_USDT')
       // console.log(res)
-      this.currentPrice = res.data.result.KVUSDT
+      this.currentPrice = res.data.result.KIWIUSDT
     },
     // 去版本页
     toVersion (type) {

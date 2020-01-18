@@ -11,25 +11,26 @@
     <div class="incubator-block" v-for="(item, index) in incubatorList" :key="index">
       <p class="block-title">{{item.name}}</p>
       <van-row class="block-row">
-        <van-col :span="12">{{item.progress}}</van-col>
+        <van-col :span="12">{{item.fixInvestProfitUnfrozenRate}}% / 天 共{{item.invest_type === '1' ? '3' : item.invest_type === '2' ? '7' : '15'}}天</van-col>
         <van-col class="text-right" :span="12">
-          <span class="incubator-status" :class="!item.active && 'color-unactive'">{{item.leftTime}}</span>
+          <span class="incubator-status" v-if="item.leftTime">持续收益中</span>
+          <span class="incubator-status" v-else :class="item.invest_status !== '1' && 'color-unactive'">{{item.invest_status === '1' ? `剩余${item.over_days}天`: '未激活'}}</span>
         </van-col>
       </van-row>
-      <p class="incubator-value">{{item.value}}kv</p>
+      <p class="incubator-value">{{amount}}kiwi</p>
       <van-slider
-        v-model="item.value"
+        v-model="amount"
         bar-height="7px"
         :step="10"
-        :max="2000"
-        :min="310"
-        :disabled="!item.active"
+        :max="maxVal"
+        :min="minVal"
+        :disabled="item.invest_status === '1' || index !== 0"
       />
       <van-row class="block-row value-wrapper">
-        <van-col :span="12">{{item.minVal}}</van-col>
-        <van-col class="text-right" :span="12">{{item.maxVal}}</van-col>
+        <van-col :span="12">{{minVal}}kiwi</van-col>
+        <van-col class="text-right" :span="12">{{maxVal}}kiwi</van-col>
       </van-row>
-      <div @click="incubator" class="custom-block-btn" :class="item.btn === '已激活' ? 'btn-active': item.btn === '不可激活' ? 'disabled-active' : ''">
+      <div @click="incubator(item)" class="custom-block-btn" :class="item.btn === '已激活' ? 'btn-active': item.btn === '不可激活' ? 'disabled-active' : ''">
         {{item.btn}}
         <i class="custom-block-btn-bg">
           <img v-if="item.btn === '已激活'" src="~@/assets/image/img/block-btn-bg@2x-active.png">
@@ -42,13 +43,13 @@
     <!--激活弹窗-->
     <van-dialog
       v-model="showDialog"
-      @confirm="dialogConfirm"
+      :before-close="dialogConfirm"
       confirmButtonText="激活"
       show-cancel-button>
       <div class="incubator-dialog-wrapper">
         <p class="dialog-title">本次投资冻结</p>
-        <p class="dialog-title">900 kv + 100 ceo</p>
-        <van-field v-model="password" type="password" placeholder="请输入资金密码" />
+        <p class="dialog-title">{{fixInvestAmountRateFee}}</p>
+        <van-field v-model="submitObj.m_security_pwd" type="password" placeholder="请输入资金密码" />
       </div>
     </van-dialog>
   </div>
@@ -56,6 +57,7 @@
 
 <script>
 import { Toast, Row, Col, Slider, NavBar, Dialog, Field } from 'vant';
+const Decimal = require('decimal.js')
 // import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -78,36 +80,41 @@ export default {
         leftText: '返回首页'
       },
       showDialog: false,
-      password: '',
+      version: '',
+      submitObj: {
+        m_security_pwd: ''
+      },
+      // 投资扣币的费用比例
+      fixInvestAmountRate: ['0.9', '0.1'],
+      fixInvestAmountRateFee: '900 kiwi + 100 ceo',
+      minVal: 310,
+      maxVal: 2000,
+      // 初级孵化金额为准
+      amount: 0,
       incubatorList: [
         {
           name: '初级孵化',
-          progress: '0.5% / 天 共15天',
-          leftTime: '剩余13天',
-          value: 1260,
-          active: true,
-          minVal: '310kv',
-          maxVal: '2000kv',
-          btn: '已激活'
-        },
-        {
-          name: '中级孵化',
-          progress: '0.5% / 天 共15天',
-          leftTime: '剩余13天',
-          value: 1260,
-          active: true,
-          minVal: '310kv',
-          maxVal: '2000kv',
+          fixInvestProfitUnfrozenRate: '0.00',
+          over_days: '13',
+          leftTime: '',
+          invest_status: '0',
+          invest_type: '3',
           btn: '立即激活'
         },
         {
+          name: '中级孵化',
+          fixInvestProfitUnfrozenRate: '0.00',
+          leftTime: '',
+          invest_status: '0',
+          invest_type: '2',
+          btn: '不可激活'
+        },
+        {
           name: '高级孵化',
-          progress: '0.5% / 天 共15天',
-          leftTime: '未激活',
-          value: 1260,
-          active: false,
-          minVal: '310kv',
-          maxVal: '2000kv',
+          fixInvestProfitUnfrozenRate: '0.00',
+          leftTime: '',
+          invest_status: '0',
+          invest_type: '1',
           btn: '不可激活'
         },
       ]
@@ -120,6 +127,12 @@ export default {
   computed: {
   },
   mounted() {
+    this.version = this.$route.params.type
+    this.invest_vertype = this.version === 'experience' ? '1' : '2'
+    this.minVal = this.version === 'experience' ? 50 : 310
+    this.maxVal = this.version === 'experience' ? 300 : 2000
+    this.amount = this.minVal
+    this.headerObj.title = this.version === 'experience' ? '体验版孵化器' : '旗舰版孵化器'
     this.init()
   },
   methods: {
@@ -129,17 +142,114 @@ export default {
     onClickRight () {},
     init () {
       // experience 体验版 flag旗舰版
-      if (this.$route.params.type === 'experience') {
-        // this.$router
-      } else {
-        //
+      this.getInvest()
+      this.getConfig()
+    },
+    async getInvest () {
+      // experience 体验版 flag旗舰版
+      const res = await this.$api.user.getInvest(this.version === 'experience' ? 1 : 2)
+      // this.address = res.data.result.fixInvestProfitUnfrozenRate
+      if (res.data.result.length) {
+        // 计算不可激活按钮个数
+        let count = 0
+        let res2 = res.data.result.reverse()
+        this.incubatorList.map((item, index) => {
+          if (index === 0) {
+            this.amount = res2[index].amount
+          }
+          // if (index === 2 || index === 1) {
+          //   res2[index].invest_status = '0'
+
+          // }
+          item.leftTime = ''
+          item.btn = '立即激活'
+          if (res2[index] && res2[index].invest_status === '1') {
+            item.btn = '已激活'
+          } else {
+            count ++
+          }
+          item = Object.assign({}, item, res2[index] || {})
+          this.$set(this.incubatorList, index, item)
+          return item
+        })
+        // 处理不可以激活
+        switch (count) {
+          case 0:
+            this.$set(this.incubatorList[0], 'leftTime', '持续收益中')
+            this.$set(this.incubatorList[1], 'leftTime', '持续收益中')
+            break
+          case 1:
+            this.$set(this.incubatorList[0], 'leftTime', '持续收益中')
+            break
+          case 2:
+            this.$set(this.incubatorList[2], 'btn', '不可激活')
+            break
+          case 3:
+            this.$set(this.incubatorList[1], 'btn', '不可激活')
+            this.$set(this.incubatorList[2], 'btn', '不可激活')
+            break
+        }
       }
     },
-    incubator (val) {
-      this.showDialog = true
+    async getConfig () {
+      // experience 体验版 flag旗舰版
+      const res = await this.$api.common.configInfo()
+      // 孵化百分比计算
+      res.data.result.fixInvestProfitUnfrozenRate.split(",").reverse().forEach((item, index) => {
+        this.incubatorList[index].fixInvestProfitUnfrozenRate = new Decimal(item).mul(100)
+      })
+      // 投资扣币的费用比例提取
+      this.fixInvestAmountRate = res.data.result.fixInvestAmountRate.split(",")
     },
-    dialogConfirm () {
-      console.log('confirm')
+    // 弹框数值计算
+    incubator (item) {
+      if (item.btn === '立即激活') {
+        // 不同级别不同金额计算 初级用原额
+        const calAmont = item.name === '初级孵化' ? this.amount : new Decimal(this.amount).dividedBy(this.fixInvestAmountRate[0])
+        this.submitObj = {
+          m_security_pwd: '',
+          amount: calAmont,
+          invest_vertype: this.invest_vertype,
+          invest_type: item.invest_type
+        }
+
+        this.showDialog = true
+        const num1 = new Decimal(calAmont).mul(this.fixInvestAmountRate[0])
+        const num2 = new Decimal(calAmont).mul(this.fixInvestAmountRate[1])
+        this.fixInvestAmountRateFee = `${num1} kiwi + ${num2} ceo`
+      }
+    },
+    dialogConfirm (action, done) {
+      if(action === 'cancel') {
+        this.showDialog = false
+        done()
+        return
+      }
+      if (!this.submitObj.m_security_pwd) {
+        Toast(`请输入密码`)
+        done(false)
+        return
+      }
+      this.$api.user.toInvest(this.submitObj).then(res => {
+        Toast(`激活成功`)
+        done()
+        // 再次获取数据
+        this.getInvest()
+      }).catch(err => {
+        switch(err.data.msg) {
+          case 'INVEST_CYCLE_ERROR':
+            Toast(`投资周期错误`)
+            break
+          case 'NO_FREE_INVEST_CYCLE':
+            Toast(`没有空余投资周期`)
+            break
+          case 'INVEST_AMOUNT_ERROR':
+            Toast(`投资金额错误`)
+            break
+        }
+        done(false)
+      })
+      // console.log(res)
     },
   }
 };

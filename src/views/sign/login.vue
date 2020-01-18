@@ -9,7 +9,7 @@
         <i class="logo">
           <img src="~@/assets/image/icon/logo.png">
         </i>
-        欢迎使用MPay
+        欢迎使用kiwi孵化器
       </h1>
     </div>
     <div class="input-box">
@@ -39,10 +39,10 @@
         登录
         <i class="custom-block-btn-bg"><img src="~@/assets/image/img/block-btn-bg@2x.png"></i>
       </div>
-      <div @click="toWxLogin" class="custom-block-btn margin-t-30">
+      <!-- <div @click="toWxLogin" class="custom-block-btn margin-t-30">
         微信登录
         <i class="custom-block-btn-bg"><img src="~@/assets/image/img/block-btn-bg@2x.png"></i>
-      </div>
+      </div> -->
     </div>
     <div id="e-bottom-wrapper" class="bottom-wrapper">
       <div class="img-box">
