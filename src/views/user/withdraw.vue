@@ -10,17 +10,17 @@
     />
     <div class="withdraw-warning-wrapper">温馨提示</div>
     <div class="withdraw-input-wrapper">
-      <van-field v-model="input.address" placeholder="输入或长按粘贴地址" />
+      <van-field v-model="submitObj.addr" placeholder="输入或长按粘贴地址" />
       <div class="input-limit-wrapper">
-        <van-field v-model="input.number" class="input-limit" placeholder="最小提币数量   2.00000000" />
-        <span class="input-unit">USDT</span>
-        <span class="input-all">全部</span>
+        <van-field v-model="submitObj.amount" class="input-limit" :placeholder="`最小提币数量   ${min_withdraw}`" />
+        <span class="input-unit">{{$route.params.id}}</span>
+        <span class="input-all" @click="submitObj.amount = available_balance">全部</span>
       </div>
     </div>
     <div class="withdraw-input-wrapper">
-      <van-field v-model="input.password" type="password" placeholder="请输入资金密码" />
+      <van-field v-model="submitObj.security_pwd" type="password" placeholder="请输入资金密码" />
     </div>
-    <p class="withdraw-mark">提现手续费1.000000 USDT   实际到账 1.000000USDT</p>
+    <p class="withdraw-mark">提现手续费{{withdraw_fee}} {{$route.params.id}}   实际到账 {{realAmount}}</p>
     
     <div class="btn-wrapper">
       <div @click="withdraw" class="custom-block-btn">
@@ -34,6 +34,7 @@
 <script>
 import { Toast, NavBar, Field } from 'vant';
 // import { mapState, mapActions, mapGetters } from 'vuex';
+const Decimal = require('decimal.js')
 
 export default {
   name: 'withdraw',
@@ -49,11 +50,18 @@ export default {
         rightText: '提现记录',
         fixed: true
       },
-      input: {
-        address: '',
-        number: '',
-        password: '',
-      }
+      submitObj: {
+        currency: '',
+        addr: '',
+        coin_label_id: '',
+        addr_label: '',
+        amount: '',
+        security_pwd: '',
+      },
+      // 最小可提
+      min_withdraw: 0,
+      withdraw_fee: 0,
+      available_balance: 0
     };
   },
   created() {
@@ -61,15 +69,54 @@ export default {
   watch: {
   },
   computed: {
+    realAmount () {
+      let val = 0
+      if (this.submitObj.amount) {
+        val = new Decimal(this.submitObj.amount).minus(this.withdraw_fee)
+      }
+      return val
+    }
   },
   mounted() {
+    this.getAssets()
   },
   methods: {
     onClickLeft () {
       this.$router.goBack();
     },
-    onClickRight () {},
-    withdraw () {},
+    onClickRight () {
+      this.$router.togo(`/my/record/${this.$route.params.id}/2/withdraw`)
+    },
+    async withdraw () {
+      if (!this.submitObj.addr) {
+        Toast('请输入提币地址')
+        return
+      } else if (!this.submitObj.amount) {
+        Toast('请输入提币数量')
+        return
+      } else if (!this.submitObj.security_pwd) {
+        Toast('请输入资金密码')
+        return
+      }
+
+      if (this.submitObj.amount < this.min_withdraw) {
+        Toast(`最小提币数量为${this.min_withdraw}`)
+        return
+      }
+      await this.$api.user.toWithdraw(this.submitObj)
+      Toast('提币成功')
+      this.getAssets()
+    },
+    // 获取资产
+    async getAssets() {
+      const res = await this.$api.user.getAssets(this.$route.params.id)
+      this.min_withdraw = res.data.result[0].currencyVO.min_withdraw
+      this.withdraw_fee = res.data.result[0].currencyVO.withdraw_fee
+      this.available_balance = res.data.result[0].available_balance
+      
+      this.submitObj.coin_label_id = this.$route.params.id === 'USDT' ? '2' : ''
+      this.submitObj.currency = this.$route.params.id
+    },
   }
 };
 </script>

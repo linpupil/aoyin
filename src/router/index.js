@@ -59,7 +59,8 @@ export default new Router({
           name: 'home',
           meta: {
             title: '首页',
-            icon: 'iconfont iconfont iconzichan'
+            icon: 'iconfont iconfont iconzichan',
+            requireAuth: true
           },
           component: () => import('@/views/main/home')
         },

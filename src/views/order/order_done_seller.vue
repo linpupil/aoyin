@@ -99,7 +99,7 @@ export default {
         '3': '银行卡',
         '4': '农信',
         '5': 'USDT交易',
-        '6': 'Mpay交易'
+        '6': 'kiwi孵化器'
       },
       paymentIconSrc: {
         '1': require('@/assets/image/icon/WeChat.png'),

@@ -36,7 +36,21 @@ const my = {
    */
   updataNickname(data) {
     return axios.post(`${base.yunc2c}/member/updnickname`, data);
-  }
+  },
+  /**
+   * 获取提现充值记录
+   * @param {Object} params
+   */
+  getRecord(params) {
+    return axios.get(`${base.yunc2c}/wealth/trans/${params.symbol}/${params.type}/${params.page}/${params.pageSize}`);
+  },
+  /**
+   * 获取投资记录
+   * @param {Object} params
+   */
+  getInvestRecord(params) {
+    return axios.get(`${base.yunc2c}/invest/rationrecord/${params.page}/${params.pageSize}`);
+  },
   // 其他接口…………
 };
 

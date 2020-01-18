@@ -112,7 +112,7 @@ export default {
         '3': '银行卡',
         '4': '农信',
         '5': 'USDT支付',
-        '6': 'Mpay交易'
+        '6': 'kiwi孵化器'
       },
       // 交易类型  1 出售  2 购买
       transDirection: 2,

@@ -11,7 +11,7 @@ export default [
     path: '/other/mpay',
     name: 'other/mpay',
     meta: {
-      title: 'Mpay支付'
+      title: 'kiwi孵化器'
     },
     component: () => import('@/views/other/mpay_payment')
   }

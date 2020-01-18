@@ -35,7 +35,7 @@ export default [
     component: () => import('@/views/my/invite_share')
   },
   {
-    path: '/my/record',
+    path: '/my/record/:symbol/:type/:title',
     name: 'record',
     meta: {
       title: '投资记录',

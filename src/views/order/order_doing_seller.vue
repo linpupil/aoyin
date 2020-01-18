@@ -32,7 +32,7 @@
           <van-cell v-if="accountInfo.bank" title="银行卡信息" :value="accountInfo.bank" />
           <van-cell v-if="accountInfo.payment_no" title="银行卡卡号" :value="accountInfo.payment_no" />
         </div>
-        <!--微信/支付宝/MPAY-->
+        <!--微信/支付宝/kiwi孵化器-->
         <div v-else>
           <van-cell title="收款方式">
             <template slot="default">
@@ -123,7 +123,7 @@ export default {
         '3': '银行卡',
         '4': '农信',
         '5': 'USDT交易',
-        '6': 'Mpay交易'
+        '6': 'kiwi孵化器'
       },
       paymentIconSrc: {
         '1': require('@/assets/image/icon/WeChat.png'),

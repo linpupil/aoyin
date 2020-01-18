@@ -1,5 +1,5 @@
 <template>
-  <div class="topup-wrapper">
+  <div class="topup-wrapper" ref="topUpWrapper">
     <van-nav-bar
       :title="headerObj.title"
       :rightText="headerObj.rightText"
@@ -15,10 +15,14 @@
       </van-row>
     </div>
     <div class="qr-code-wrapper">
-      <div class="qr-code-img-wrapper"></div>
+      <div class="qr-code-img-wrapper">
+        <!-- <qrcode-vue :value="address" :size="200" level="M"></qrcode-vue> -->
+        <canvas id="mycanvas" ref="mycanvas" height="200" width="200"></canvas>
+        <div id="qrCode" class="qrconde" v-if="address" ref="qrCodeDiv" style="width: 200px;height: 200px"></div>
+      </div>
       <div @click="saveToAlbum" class="custom-block-btn">
         保存二维码至相册
-        <i class="custom-block-btn-bg"><img src="~@/assets/image/img/block-btn-bg@2x.png"></i>
+        <i class="custom-block-btn-bg"><img id="img" src="~@/assets/image/img/block-btn-bg@2x.png"></i>
       </div>
       <p class="code-address" id="foo">{{address}}</p>
       <!-- <van-field v-model="address" id="foo" class="address-input" ref="address"></van-field> -->
@@ -34,6 +38,7 @@
 <script>
 import { Toast, NavBar, Field, Row, Col } from 'vant'
 import Clipboard from 'clipboard'
+import QRCode from 'qrcodejs2'
 // import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -52,7 +57,8 @@ export default {
         rightText: '充值记录',
         fixed: true
       },
-      address: '0xdsf8r48ge15ry8h81n8y4y568q15tu1k805p890l9v'
+      address: 'reading...',
+      imgData: ''
     };
   },
   created() {
@@ -68,31 +74,61 @@ export default {
     onClickLeft () {
       this.$router.goBack();
     },
-    onClickRight () {},
+    onClickRight () {
+      this.$router.togo(`/my/record/${this.$route.params.id}/1/topUp`)
+    },
     topup () {},
     copyText () {
-       console.log(Clipboard)
-      // const address = this.$refs.address
-      // const address = document.getElementById('address')
-      // address.select()
-      // document.execCommand("Copy") // 执行浏览器复制命令
       var clipboard = new Clipboard('.code-button');
 
       clipboard.on('success', function(e) {
-          console.info('Action:', e.action);
-          console.info('Text:', e.text);
-          console.info('Trigger:', e.trigger);
-
           e.clearSelection();
       });
 
       // window.clipboardData.setData("Text", this.address);
       Toast('已复制到剪贴板，粘贴可用！')
-
     },
-    saveToAlbum () {},
-    getTopUpAddress () {
+    // 生成二维码
+    bindQRCode () {
+      // let t = this
+      // console.log(t.userInfo.account)
+      new QRCode(this.$refs.qrCodeDiv, {
+        text: this.address,
+        width: 200,
+        height: 200,
+        colorDark: '#333333', // 二维码颜色
+        colorLight: '#ffffff', // 二维码背景色
+        correctLevel: QRCode.CorrectLevel.L// 容错率，L/M/H
+      })
       
+      // let a = this.$refs.qrCodeDiv.getElementsByTagName('img')
+      // console.log(a[0].getAttribute('src'))
+       // 二维码生成后，执行生成图片
+      this.createPicture()
+    },
+    // 生成图片
+    createPicture () {
+			var mycanvas = this.$refs.mycanvas
+			var ctx = mycanvas.getContext('2d')
+      const img = this.$refs.qrCodeDiv.getElementsByTagName('img')[0]
+      ctx.drawImage(img, 0, 0);
+      this.imgData = mycanvas.toDataURL('image/jpeg')
+      mycanvas.style.display = 'none'
+    },
+    // 保存图片
+    saveToAlbum () {
+      var a = document.createElement('a')
+      a.setAttribute('href', this.imgData)
+      a.setAttribute('download', 'kiwiQrCode')
+      a.setAttribute('target','_blank')
+      let clickEvent = document.createEvent('MouseEvents')
+      clickEvent.initEvent('click', true, true)
+      a.dispatchEvent(clickEvent);
+    },
+    async getTopUpAddress () {
+      const res = await this.$api.user.getTopUpAddress({symbol: this.$route.params.id, coin_label_id: 2})
+      this.address = res.data.result.a_address
+      this.bindQRCode()
     }
   }
 };
@@ -120,9 +156,10 @@ export default {
 
     .qr-code-img-wrapper {
       width: 200px;
-      min-height: 180px;
-      background-color: #afafaf;
+      min-height: 150px;
+      // background-color: #afafaf;
       margin: 0 auto 10px;
+      // padding: 3px 3px 1px 3px;
     }
   }
 
