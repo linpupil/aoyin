@@ -46,6 +46,13 @@
         clearable
         placeholder="请再次输入密码"
       />
+    </div>
+    <div class="input-box">
+     <van-field
+        v-model="secode"
+        clearable
+        placeholder="请输入邀请码"
+      />
       <div class="line-row tips">
         <van-row type="flex" justify="space-between">
           <van-col><van-checkbox v-model="chkAgree" shape="square">我已阅读并接受相关条款<span @click="toServeStatement">《服务条款》</span><span @click="toPrivacyStatement">《隐私政策》</span></van-checkbox></van-col>
@@ -89,6 +96,8 @@ export default {
       verifyCode: '',
       pwd: '',
       pwdAgin: '',
+      // 邀请码
+      secode: '',
       chkAgree: false,
       isCanSend: true,
       sendTimeout: BASE.VerifySendTimeout
@@ -146,6 +155,10 @@ export default {
         Toast('请输入密码');
         return false;
       }
+      if (!this.secode) {
+        Toast('请输入邀请码');
+        return false;
+      }
       if (!rules.letterDigit.test(this.pwd)) {
         Toast('请输入6-16位数字、字母组合密码');
         return false;
@@ -177,7 +190,8 @@ export default {
       this.$api.sign.register({
         area_code: this.m_name,
         m_name: this.username,
-        m_pwd: this.pwd
+        m_pwd: this.pwd,
+        secode: this.secode
       }).then(res => {
         Toast('注册成功');
         this.$router.replace('/login');
