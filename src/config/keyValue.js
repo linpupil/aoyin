@@ -22,6 +22,9 @@ const keyValue = {
     '1': '3',
     '2': '7',
     '3': '15'
+  },
+  releaseType: {
+    '1': '定本收益释放'
   }
 }
 export default keyValue
