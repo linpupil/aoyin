@@ -47,7 +47,7 @@
         placeholder="请再次输入密码"
       />
     </div>
-    <div class="input-box">
+    <div class="input-box input-box-last">
      <van-field
         v-model="secode"
         clearable
@@ -155,16 +155,16 @@ export default {
         Toast('请输入密码');
         return false;
       }
-      if (!this.secode) {
-        Toast('请输入邀请码');
-        return false;
-      }
       if (!rules.letterDigit.test(this.pwd)) {
         Toast('请输入6-16位数字、字母组合密码');
         return false;
       }
       if (this.pwd !== this.pwdAgin) {
         Toast('两次输入的密码不一致');
+        return false;
+      }
+      if (!this.secode) {
+        Toast('请输入邀请码');
         return false;
       }
       if (!this.chkAgree) {
@@ -241,12 +241,16 @@ export default {
 .input-box{
   margin-bottom: 30px;
 }
+.input-box-last {
+  position: relative;
+  z-index: 1;
+}
 
 .line-row{
   margin: 10px 16px 10px;
 }
 .btn-wrapper{
-  margin-top: 20%;
+  // margin-top: 5%;
 }
 .bottom-wrapper{
   position: absolute;
